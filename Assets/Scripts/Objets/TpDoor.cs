@@ -7,6 +7,7 @@ public class TpDoor : MonoBehaviour
 
     [SerializeField] private Transform coordSpawn;
     [SerializeField] private Transform player;
+    [SerializeField] private CameraLevelTp cameraLevelTp;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -22,7 +23,16 @@ public class TpDoor : MonoBehaviour
         VariableGlobale.jeuEnPause = true;
 
         // Téléporter le joueur au départ (pour le niveau suivant)
+        
+        if (VariableGlobale.indLevel < VariableGlobale.maxIndLevel - 1)
+        {
+            VariableGlobale.indLevel++;
+        }
+
+        cameraLevelTp.niveauSuivant();
+
         player.position = coordSpawn.position;
+        
 
         // Attendre pendant 1 seconde
         yield return new WaitForSeconds(2f);
