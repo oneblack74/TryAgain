@@ -50,62 +50,67 @@ public class MovePlayer : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-        // deplacement
-        Vector2 _moveValue = moveAction.ReadValue<Vector2>();
-        velocity = _moveValue*speed;
-        transform.position += new Vector3(velocity.x * Time.fixedDeltaTime, 0, 0);
-
-
-        // mettre la variable direction à 1 ou -1 (droite ou gauche) en fonction des touches appuyé
-        if (_moveValue.x > 0)
+        if (!VariableGlobale.jeuEnPause)
         {
-            dir = 1;
-        }
-        else if (_moveValue.x < 0)
-        {
-            dir = -1;
-        }
 
-        // mettre la variable de marche à true ou false
-        walk = (_moveValue[0] != 0);
+            // deplacement
+            Vector2 _moveValue = moveAction.ReadValue<Vector2>();
+            velocity = _moveValue*speed;
+            transform.position += new Vector3(velocity.x * Time.fixedDeltaTime, 0, 0);
+
+
+            // mettre la variable direction à 1 ou -1 (droite ou gauche) en fonction des touches appuyé
+            if (_moveValue.x > 0)
+            {
+                dir = 1;
+            }
+            else if (_moveValue.x < 0)
+            {
+                dir = -1;
+            }
+
+            // mettre la variable de marche à true ou false
+            walk = (_moveValue[0] != 0);
+        }
         
     }
 
     void Update()
     {
-        // mise à jour de la variable estAuSol
-        estAuSol = Physics2D.OverlapArea(verifierSolGauche.position, verifierSolDroit.position, LayerMask.GetMask("Solide"));
-        // mise à jour de la variable doubleJumpOn
-        if (estAuSol && !doubleJumpOn) doubleJumpOn = true;
-
-        // flip le sprite en fonction de la direction
-        if (dir == 1 && GetComponent<SpriteRenderer>().flipX == true)
+        if (!VariableGlobale.jeuEnPause)
         {
-            GetComponent<SpriteRenderer>().flipX = false;
+            // mise à jour de la variable estAuSol
+            estAuSol = Physics2D.OverlapArea(verifierSolGauche.position, verifierSolDroit.position, LayerMask.GetMask("Solide"));
+            // mise à jour de la variable doubleJumpOn
+            if (estAuSol && !doubleJumpOn) doubleJumpOn = true;
+
+            // flip le sprite en fonction de la direction
+            if (dir == 1 && GetComponent<SpriteRenderer>().flipX == true)
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+            }
+            else if (dir == -1 && GetComponent<SpriteRenderer>().flipX == false)
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+
+
+            // faire un sout ou double saut si la touche est trigger
+            if (jumpAction.triggered && estAuSol)
+            {
+                rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+            }
+            else if (jumpAction.triggered && doubleJumpOn)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, 0, 0);
+                rb.AddForce(new Vector2(0f, doubleJumpForce), ForceMode2D.Impulse);
+                doubleJumpOn = false;
+            }
+
+
+            // Modifier les variables dans l'animator
+            animator.SetBool("Walk", walk);
         }
-        else if (dir == -1 && GetComponent<SpriteRenderer>().flipX == false)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-        }
-
-
-        // faire un sout ou double saut si la touche est trigger
-        if (jumpAction.triggered && estAuSol)
-        {
-            rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
-        }
-        else if (jumpAction.triggered && doubleJumpOn)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, 0, 0);
-            rb.AddForce(new Vector2(0f, doubleJumpForce), ForceMode2D.Impulse);
-            doubleJumpOn = false;
-        }
-
-
-        // Modifier les variables dans l'animator
-        animator.SetBool("Walk", walk);
-
     }
 
     public virtual int getDir {
