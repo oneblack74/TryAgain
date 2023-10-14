@@ -29,6 +29,8 @@ public class MovePlayer : MonoBehaviour
     private bool doubleJumpOn;
     private Rigidbody2D rb;
 
+    [SerializeField] private Transform coordStart;
+
 
     void Start() 
     {
@@ -45,6 +47,8 @@ public class MovePlayer : MonoBehaviour
 
         verifierSolGauche = GameObject.Find("verifierJumpL").GetComponent<Transform>();
         verifierSolDroit = GameObject.Find("verifierJumpR").GetComponent<Transform>();
+
+        transform.position = coordStart.position;
     
     }
 

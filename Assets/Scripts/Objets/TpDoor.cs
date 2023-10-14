@@ -5,9 +5,16 @@ using UnityEngine;
 public class TpDoor : MonoBehaviour
 {
 
-    [SerializeField] private Transform coordSpawn;
-    [SerializeField] private Transform player;
-    [SerializeField] private CameraLevelTp cameraLevelTp;
+    private Transform player;
+    private CameraLevelTp cameraLevelTp;
+    private ManagerLevel managerLevel;
+
+    void Start()
+    {
+        managerLevel = GameObject.Find("LevelManager").GetComponent<ManagerLevel>();
+        player = GameObject.Find("Player").GetComponent<Transform>();
+        cameraLevelTp = GameObject.Find("MainCamera").GetComponent<CameraLevelTp>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -31,7 +38,7 @@ public class TpDoor : MonoBehaviour
 
         cameraLevelTp.niveauSuivant();
 
-        player.position = coordSpawn.position;
+        player.position = managerLevel.getCoordSpawnPlayer[VariableGlobale.indLevel].position;
         
 
         // Attendre pendant 1 seconde
