@@ -42,7 +42,7 @@ public class TpDoor : MonoBehaviour
         
 
         // Attendre pendant 1 seconde
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
 
         // Mettre la variable VariableGlobale.jeuEnPause à false
         VariableGlobale.jeuEnPause = false;

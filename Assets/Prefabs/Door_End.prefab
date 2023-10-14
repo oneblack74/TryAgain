@@ -80,9 +80,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bcab7969ae55834d8a4a19eac163a3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coordSpawn: {fileID: 0}
-  player: {fileID: 0}
-  cameraLevelTp: {fileID: 0}
 --- !u!1 &2217725215995180530
 GameObject:
   m_ObjectHideFlags: 0
